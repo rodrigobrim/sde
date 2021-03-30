@@ -1,16 +1,14 @@
-The following additional packages will be installed:
-  buildah conmon containernetworking-plugins crun fuse-overlayfs fuse3
-  golang-github-containers-common libfuse3-3 libostree-1-1 libslirp0
-  slirp4netns tini uidmap
-Suggested packages:
-  containers-storage
-The following packages will be REMOVED:
-  fuse
-The following NEW packages will be installed:
-  buildah conmon containernetworking-plugins crun fuse-overlayfs fuse3
-  golang-github-containers-common libfuse3-3 libostree-1-1 libslirp0 podman
-  slirp4netns tini uidmap
-0 upgraded, 14 newly installed, 1 to remove and 0 not upgraded.
-Need to get 27,4 MB of archives.
-After this operation, 124 MB of additional disk space will be used.
-Do you want to continue? [Y/n] 
+buildah
+conmon
+containernetworking-plugins
+crun
+fuse3
+fuse-overlayfs
+golang-github-containers-common
+libfuse3-3
+libostree-1-1
+libslirp0
+podman
+slirp4netns
+tini
+uidmap
