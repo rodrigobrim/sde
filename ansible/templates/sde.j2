@@ -1,0 +1,27 @@
+# Aliases
+{% for alias in aliases %}
+{{ alias }}
+{% endfor %}
+
+# Volumes
+podman_volumes="{%- for source_dir,mount_point in volumes -%}-v source_dir:mount_point {%- endfor -%}"
+
+# Commands
+
+
+
+
+
+alias vi=vim
+
+podman_volumes="-v /home/rodrigo:/root -v ./:/current-dir -v /home/rodrigo/repos:/git-repos"
+
+podmancmd() { podman run ${podman_volumes} ${default_container} "$@"; }
+podmancmdit() { podman run -it ${podman_volumes} ${default_container}; }
+
+ans() { podman run ${podman_volumes} ${ansible_container} ansible-playbook "$@" playbook.yml ; }
+ans-check() { podman run ${podman_volumes} ${ansible_container} ansible-playbook "$@" playbook.yml --syntax-check ; }
+ans-v() { podman run ${podman_volumes} ${ansible_container} ansible-playbook "$@" playbook.yml -v ; }
+ans-vv() { podman run ${podman_volumes} ${ansible_container} ansible-playbook "$@" playbook.yml -vv ; }
+ans-vvv() { podman run ${podman_volumes} ${ansible_container} ansible-playbook "$@" playbook.yml -vvv ; }
+ans-vvvv() { podman run ${podman_volumes} ${ansible_container} ansible-playbook "$@" playbook.yml -vvvv ; }
