@@ -1,8 +1,17 @@
-#!/bin/bash -x
+#!/bin/bash
 
 username=`id -u -n`
+ansible_inv=/home/${username}/invs/localhost
+repo_path="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; cd .. ; pwd -P )"
+
+ansible_container=docker.io/rodrigobrim/ansible:latest
 
 test_podman(){
+  skopeo >/dev/null 2>&1
+  if [ $? -ne 0 ]
+  then
+    fail_podman=1
+  fi
   podman image exists docker.io/library/debian:stable-slim
   if [ $? -eq 0 ]
   then
@@ -32,16 +41,15 @@ test_ssh_key(){
 }
 
 configure_podman(){
-  sudo apt install -y podman
+  sudo apt install -y podman skopeo
   sudo systemctl enable podman.service
   sudo systemctl start podman.service
   
   containers_config_path=~/.config/containers
-  script_path="`dirname \"$0\"`/.."
   
   mkdir -p ${containers_config_path}
-  cp ${script_path}/config/policy.json ${containers_config_path}
-  cp ${script_path}/config/registries.conf ${containers_config_path}
+  cp ${repo_path}/config/policy.json ${containers_config_path}
+  cp ${repo_path}/config/registries.conf ${containers_config_path}
 } 
 
 configure_ssh(){
@@ -55,8 +63,20 @@ configure_ssh_key(){
   cat /home/${username}/.ssh/id_rsa.pub >> /home/${username}/.ssh/authorized_keys
 }
 
+configure_sudo_nopasswd(){
+  echo "${username} ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/${username}
+}
+
 configure_ansible(){
-  sudo ln -s /usr/bin/python3 /usr/bin/python
+  primary_network=`ip ro | grep default | head -1 | awk '{print $3}' | cut -d'.' -f'1-3'`
+  primary_address=`ip ad | grep ${primary_network} | awk '{print $2}' | cut -d'/' -f1`
+  mkdir -p `dirname ${ansible_inv}`
+  cp ${repo_path}/config/ansible.cfg /home/${username}/invs
+cat > ${ansible_inv} <<end_inv
+[all]
+${primary_address}
+end_inv
+  podman run -v "/home/${username}:/home" -v "${repo_path}/ansible:/root/ansible" -v "/home/${username}/invs:/etc/ansible" ${ansible_container} ansible-playbook -i /home/invs/`basename ${ansible_inv} suffix` -u ${username} ansible/bashrc.yml
 }
 
 test_podman
@@ -78,3 +98,4 @@ then
 fi
 
 configure_ansible
+configure_sudo_nopasswd
