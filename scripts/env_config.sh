@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 username=`id -u -n`
 ansible_inv=/home/${username}/invs/localhost
@@ -33,7 +33,7 @@ test_ssh(){
 }
 
 test_ssh_key(){
-  file /home/${username}/.ssh/id_rsa
+  ls /home/${username}/.ssh/id_rsa >/dev/null 2>&1
   if [ $? -ne 0 ]
   then
     fail_ssh_key=1
