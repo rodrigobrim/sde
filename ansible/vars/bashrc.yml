@@ -1,0 +1,16 @@
+---
+
+ansible_container: localhost/ansible:0.0.1
+
+aliases:
+  - vi=vim
+
+podman_volumes:
+  - source_dir: "{{ ansible_env.HOME }}"
+    mount_dir: /home
+  - source_dir: ./
+    mount_dir: /root
+  - source_dir: "{{ ansible_env.HOME }}/invs"
+    mount_dir: /root/invs
+  - source_dir: "{{ ansible_env.HOME }}/invs"
+    mount_dir: /etc/ansible
