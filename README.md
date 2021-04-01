@@ -16,12 +16,12 @@ $ scripts/env_config.sh
 ```
 ## Usage:
 
-### podman -it ansible
+### podman run -it ansible
 ```
 $ podmancmdit
 ```
 
-### podman ansible-playbook -i invs/localhost /repos/playbooks/playbook.yml -e var=foo
+### podman run ansible-playbook -i invs/localhost /repos/playbooks/playbook.yml -e var=foo
 ```
 $ ans -i invs/localhost /repos/playbooks/playbook.yml -e var=foo
 ```
