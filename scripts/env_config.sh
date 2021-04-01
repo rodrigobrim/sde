@@ -49,7 +49,7 @@ test_authorized_keys(){
 }
 
 configure_podman(){
-  sudo apt install -y podman skopeo
+  sudo apt install -y podman skopeo runc
   sudo systemctl enable podman.service
   sudo systemctl start podman.service
   
