@@ -1,0 +1,20 @@
+---
+- name: Playbook to build a container
+  hosts: all
+  gather_facts: yes
+  vars:
+    tag: "{{ ansible_date_time.year + ansible_date_time.month + ansible_date_time.day + ansible_date_time.hour + ansible_date_time.year + ansible_date_time.minute }}"
+  tasks:
+
+    - name: Build {{ image }} with podman
+      podman_image:
+        name: "{{ image }}"
+        path: "{{ path }}"
+        tag: "{{ tag }}"
+
+    - name: Tag {{ image }} as latest
+      podman_image:
+        name: "{{ image }}"
+        path: "{{ path }}"
+        pull: no
+        tag: latest
