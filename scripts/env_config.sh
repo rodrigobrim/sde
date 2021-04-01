@@ -12,12 +12,12 @@ test_podman(){
   then
     fail_podman=1
   fi
-  podman image exists docker.io/library/debian:stable-slim
+  podman image exists docker.io/library/debian:stable-slim >/dev/null 2>&1
   if [ $? -eq 0 ]
   then
     return
   fi
-  podman pull debian:stable-slim
+  podman pull debian:stable-slim >/dev/null 2>&1
   if [ $? -ne 0 ]
   then
     fail_podman=1
@@ -80,7 +80,7 @@ end_inv
 }
 
 test_podman
-if [ -z ${fail_podman+x} -z ]
+if [ ! -z ${fail_podman+x} ]
 then
   configure_podman
 fi
@@ -100,5 +100,5 @@ fi
 configure_ansible
 configure_sudo_nopasswd
 
-read -p "We must finish this session to reload .bashrc. Press enter to reload or ctrl+c to cancel and don't load bashrc" -n 1 -r
+read -p "Press any key to reload .bashrc (finish this session) or ctrl+c to cancel" -n 1 -r
 kill -USR1 $PPID
