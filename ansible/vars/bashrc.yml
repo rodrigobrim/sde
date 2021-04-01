@@ -1,6 +1,6 @@
 ---
 
-ansible_container: localhost/ansible:0.0.1
+ansible_container: docker.io/rodrigobrim/ansible:latest
 
 aliases:
   - vi=vim
