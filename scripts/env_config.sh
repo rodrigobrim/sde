@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 username=`id -u -n`
 ansible_inv=/home/${username}/invs/localhost
