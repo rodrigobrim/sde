@@ -33,10 +33,18 @@ test_ssh(){
 }
 
 test_ssh_key(){
-  ssh -o BatchMode=yes ${username}@localhost true
+  file /home/${username}/.ssh/id_rsa
   if [ $? -ne 0 ]
   then
     fail_ssh_key=1
+  fi
+}
+
+test_authorized_keys(){
+  grep -F -f /home/${username}/.ssh/id_rsa.pub /home/${username}/.ssh/authorized_keys >/dev/null 2>&1
+  if [ $? -ne 0 ]
+  then
+    fail_authorized_keys=1
   fi
 }
 
@@ -60,6 +68,9 @@ configure_ssh(){
 
 configure_ssh_key(){
   ssh-keygen -b 2048 -t rsa -f /home/${username}/.ssh/id_rsa -q -N ""
+}
+
+configure_authorized_keys(){
   cat /home/${username}/.ssh/id_rsa.pub >> /home/${username}/.ssh/authorized_keys
 }
 
@@ -95,6 +106,12 @@ test_ssh_key
 if [ ! -z ${fail_ssh_key+x} ]
 then
   configure_ssh_key
+fi
+
+test_authorized_keys
+if [ ! -z ${fail_authorized_keys+x} ]
+then
+  configure_authorized_keys
 fi
 
 configure_ansible
