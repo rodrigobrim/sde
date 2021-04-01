@@ -1,6 +1,0 @@
----
-aliases:
-  - vi=vim
-
-podman_volumes:
-  - source_dir: /home/rodrigo

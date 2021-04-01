@@ -99,3 +99,6 @@ fi
 
 configure_ansible
 configure_sudo_nopasswd
+
+read -p "We must finish this session to reload .bashrc. Press enter to reload or ctrl+c to cancel and don't load bashrc" -n 1 -r
+kill -USR1 $PPID
