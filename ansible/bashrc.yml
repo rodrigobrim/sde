@@ -1,0 +1,20 @@
+---
+- name: Configure ~/.bashrc
+  hosts: all
+  gather_facts: yes
+  gather_subset: min
+
+  tasks:
+    - name: Load bashrc vars
+      include_vars:
+        file: bashrc.yml
+
+    - name: Apply ~/.sde template
+      template:
+        src: sde.j2
+        dest: "{{ ansible_env.HOME }}/.sde"
+
+    - name: Insert sde call on  ~/.bashrc
+      lineinfile:
+        line: ". ~/.sde"
+        path: "{{ ansible_env.HOME }}/.bashrc"
